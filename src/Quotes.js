@@ -2,28 +2,31 @@ import React, { useEffect, useState } from 'react';
 
 export const Quotes = () => {
   const [quotesData, setQuotesData] = useState([]);
+  const [text, setText] = useState("");
+  const [author, setAuthor] = useState("");
 
 
-  const getQuotesData = async () => {
-    try {
-      let datas = await fetch("https://type.fit/api/quotes");
-      let response = await datas.json();
-      setQuotesData(response);
-    }
-    catch (err) {
-      console.log(err)
-    }
+  const getRandomQuote = () => {
+    let randomNumber = Math.floor(Math.random() * 1643);
+    setText(quotesData[randomNumber].text);
+    setAuthor(quotesData[randomNumber].author);
   }
 
 
-  console.log(quotesData)
   useEffect(() => {
-    getQuotesData();
+    fetch("https://type.fit/api/quotes")
+      .then((res) => res.json())
+      .then((jsonData) => setQuotesData(jsonData));
+
+    // getRandomQuote();
   }, [])
 
   return (
     <>
       <h1>Quotes</h1>
+      <h3>{text}</h3>
+      <h4>{author}</h4>
+      <button onClick={getRandomQuote}>Click</button>
     </>
   )
 }
